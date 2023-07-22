@@ -1,3 +1,5 @@
+import time
+
 from web3 import Web3
 from web3.types import LogReceipt, HexBytes
 from web3._utils.filters import LogFilter
@@ -40,7 +42,7 @@ def standard_trx_build_for_sc_call_with_gas(base_adr, provider_url: str) -> dict
         'maxPriorityFeePerGas': 3000000000,
     }
     gas_eddition = 1000
-    if not provider_url.index("infura"):
+    if provider_url.find("infura") != -1:
         gas_eddition = 10000
     gas = web3.eth.estimate_gas(build_trx_config) + gas_eddition
     build_trx_config['gas'] = gas + int(gas * 0.2)
@@ -90,6 +92,7 @@ def read_queue_messages(message_queue):
         print(f"Received message: {message} (Timestamp: {timestamp})")
         m_type = message.get('type', '')
         if m_type == 'handle_issue_inited':
+            time.sleep(3)
             m_id_in_contract = int(message.get('issue_index'))
             signIssueInMSW(
                 guardian_adr=guradian_adr,
