@@ -117,6 +117,7 @@ async def sibr_events_handler(event_filters, poll_interval):
     while True:
         if type(event_filters) is LogFilter:
             for SomeEventArrived in event_filters.get_new_entries():
+                await asyncio.sleep(poll_interval * 2)
                 handle_event(SomeEventArrived)
             await asyncio.sleep(poll_interval)
         else:
